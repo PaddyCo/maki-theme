@@ -13,8 +13,6 @@ class File {
     function exists(path) {
         path = fe.path_expand(path);
 
-        print("Checking if " + path + " exists...");
-
         try {
             file(path, "r");
         } catch(exception) {
