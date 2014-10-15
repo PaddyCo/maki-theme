@@ -4,7 +4,8 @@
  */
 class Wheel {
 
-    object = null;
+    imageObject = null;
+    textObject = null;
 
     x = 0;
     y = 0;
@@ -23,15 +24,35 @@ class Wheel {
         x = startX;
         y = startY;
 
-        object = fe.add_artwork(config["wheel_artwork_type"]);
-        object.preserve_aspect_ratio = true;
-        object.video_flags = Vid.ImagesOnly;
-        object.index_offset = gameOffset;
+        // Setup image object
+        imageObject = fe.add_artwork(config["wheel_artwork_type"]);
+        imageObject.preserve_aspect_ratio = true;
+        imageObject.video_flags = Vid.ImagesOnly;
+        imageObject.index_offset = gameOffset;
+
+        // Setup text object
+        textObject = fe.add_text(fe.game_info(Info.Title, gameOffset), x, y, 256, 256);
+        textObject.charsize = 32;
+        textObject.word_wrap = true;
+
         update();
     }
 
     function update() {
-        object.x = x;
-        object.y = y;
+        imageObject.x = x;
+        imageObject.y = y;
+        textObject.x = x;
+        textObject.y = y;
+
+        imageObject.alpha = (gameOffset == 0) ? 255 : 100;
+        textObject.alpha = (gameOffset == 0) ? 255 : 100;
+
+        textObject.msg = fe.game_info(Info.Title, gameOffset);
+
+        local file = File();
+        local config = fe.get_config();
+        local imageExists = file.exists(config["wheel_artwork_path"] + "\\" + fe.game_info(Info.Name, gameOffset) + ".png");
+        imageObject.visible = imageExists;
+        textObject.visible = !imageExists;
     }
 }
