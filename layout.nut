@@ -5,7 +5,10 @@ class UserConfig {
 }
 
 // Include classes
+fe.do_nut("file.nut");
 fe.do_nut("wheel.nut");
+
+local file = File();
 
 local wheels = [
         Wheel(-1, 100, 100),
@@ -13,9 +16,7 @@ local wheels = [
         Wheel(1, 300, 100)
     ];
 
-
-
-fe.add_transition_callback( "transition" );
+fe.add_transition_callback("transition");
 
 function transition() {
     foreach (wheel in wheels) {
