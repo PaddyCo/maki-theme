@@ -10,6 +10,9 @@ class UserConfig {
     options="Yes,No" />
     background_artwork_aspect_ratio="Yes";
 
+    </ label="Toggle Information Key", help="The key used to open/close the information pane", is_input="yes" />
+	toggle_info_key="R";
+
     // TODO: Actually get this from the config instead of having to configure it
     </ label="Wheel Artwork Path", help="The path to the artwork" />
     wheel_artwork_path=@"D:\Games\Mame\wheels";
@@ -20,6 +23,7 @@ local config = fe.get_config();
 // Include classes
 fe.do_nut("file.nut");
 fe.do_nut("wheel.nut");
+fe.do_nut("infopane.nut");
 
 local file = File();
 
@@ -34,6 +38,9 @@ local wheels = [
         Wheel(1, wheelY),
         Wheel(2, wheelY)
     ];
+
+
+local infoPane = InfoPane();
 
 fe.add_transition_callback("transition");
 
@@ -51,4 +58,5 @@ function tick(ttime) {
     foreach (wheel in wheels) {
         wheel.update();
     }
+    infoPane.update();
 }
