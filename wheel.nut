@@ -27,11 +27,11 @@ class Wheel {
     {
         local config = fe.get_config();
 
-        width = 250;
-        margin = fe.layout.width/4;
+        width = fe.layout.width/4;
+        margin = fe.layout.width/10;
 
         gameOffset = startGameOffset;
-        y = startY;
+        y = startY - (width/4);
         x = calculateX();
 
         // Setup image object

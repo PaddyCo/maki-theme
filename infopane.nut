@@ -9,8 +9,8 @@ class InfoPane {
     isOpen = false;
     keyJustPressed = true;
 
-    headerHeight = 128;
-    padding = 16;
+    headerHeight = 64;
+    padding = 10;
 
     constructor() {
         y = fe.layout.height - headerHeight;
@@ -19,17 +19,15 @@ class InfoPane {
         background.set_bg_rgb(0,0,0);
         background.bg_alpha = 128;
 
-        titleText = fe.add_text("[Title]", padding, y+padding, fe.layout.width, headerHeight/3);
+        titleText = fe.add_text("[Title]", (-11)+padding, y+padding, fe.layout.width, headerHeight/3);
         titleText.font = "OpenSans-Bold.ttf";
         titleText.style = Style.Bold;
         titleText.align = Align.Left;
 
-        developerText = fe.add_text("© [Year] [Manufacturer]", padding+4, (y+headerHeight)-padding-(headerHeight/3.5), fe.layout.width, headerHeight/3.5);
+        developerText = fe.add_text("© [Year] [Manufacturer]", (-20+8)+padding, (y+headerHeight)-padding-(headerHeight/3), fe.layout.width, headerHeight/3);
         developerText.set_rgb(146,214,252);
         developerText.font = "OpenSans-Regular.ttf";
         developerText.align = Align.Left;
-
-
     }
 
     function open() {
@@ -61,6 +59,6 @@ class InfoPane {
 
         background.y = y;
         titleText.y = y+padding;
-        developerText.y = (y+headerHeight)-padding-(headerHeight/3.5);
+        developerText.y = (y+headerHeight)-padding-(headerHeight/3);
     }
 }
