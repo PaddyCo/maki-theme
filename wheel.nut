@@ -9,7 +9,11 @@ class Wheel {
 
     x = 0;
     y = 0;
+    baseY = 0;
     gameOffset = 0;
+
+    width = null;
+    margin = null;
 
     targetX = null;
     targetY = null;
@@ -17,22 +21,25 @@ class Wheel {
     /**
      * Params:
      *          startGameOffset: (int) Which games it should show, 0 is the active game while 1 is the next game.
-     *          startX: (int) X position of the wheel
      *          startY: (int) Y position of the wheel
      */
-    constructor(startGameOffset, startX, startY)
+    constructor(startGameOffset, startY)
     {
         local config = fe.get_config();
 
+        width = 250;
+        margin = fe.layout.width/4;
+
         gameOffset = startGameOffset;
-        x = startX;
         y = startY;
+        x = calculateX();
 
         // Setup image object
         imageObject = fe.add_artwork(config["wheel_artwork_type"]);
         imageObject.preserve_aspect_ratio = true;
         imageObject.video_flags = Vid.ImagesOnly;
         imageObject.index_offset = gameOffset;
+        imageObject.width = width;
 
         // Setup text object
         textObject = fe.add_text(fe.game_info(Info.Title, gameOffset), x-128, y, 256, 256);
@@ -41,15 +48,26 @@ class Wheel {
         updateGame();
     }
 
+    function calculateX() {
+        return (((fe.layout.width/2) - width/2) + (gameOffset * (width+margin))).tointeger();
+    }
+
     /**
      * Animates the Wheel to specified position.
      * Params:
-     *          x: (int) The X position to animate to, `null` to not animate
-     *          y: (int) The Y position to animate to, `null` to not animate
+     *          xPosition: (int) The X position to animate to, `null` to not animate
+     *          yPosition: (int) The Y position to animate to, `null` to not animate
      */
-    function moveTo(x, y) {
-        targetX = x;
-        targetY = y;
+    function moveTo(xPosition, yPosition) {
+        if (targetX != null) {
+            x = targetX;
+        }
+        if (targetY != null) {
+            y = targetY;
+        }
+
+        targetX = xPosition;
+        targetY = yPosition;
     }
 
     /**
@@ -70,13 +88,15 @@ class Wheel {
                 animate = false;
             }
 
-            local targetX = 500 + (gameOffset * 500);
-
-            if (animate) {
-                moveTo(targetX, null);
+            if (animate == true) {
+                moveTo(calculateX(), null);
             } else {
-                x = targetX;
+                x = calculateX();
+                targetX = null;
             }
+        } else {
+            x = calculateX();
+            targetX = null;
         }
 
         updateGame();
@@ -104,8 +124,17 @@ class Wheel {
      */
     function update() {
 
+        local speed = 40;
+
         if (targetX != null) {
-            x += (targetX > x) ? 50 : -50;
+            local direction = (targetX > x) ? 1 : -1;
+
+            if ((direction == 1 && (x + speed) > targetX) || (direction == -1 && (x - speed) < targetX)) {
+                x = targetX;
+            } else {
+                x += speed * direction;
+            }
+
             if (targetX == x) {
                 targetX = null;
             }
@@ -113,9 +142,9 @@ class Wheel {
             y += 1
         }
 
-        imageObject.x = x;
-        imageObject.y = y;
-        textObject.x = x;
-        textObject.y = y;
+        imageObject.x = x.tointeger();
+        imageObject.y = y.tointeger();
+        textObject.x = x.tointeger();
+        textObject.y = y.tointeger();
     }
 }
