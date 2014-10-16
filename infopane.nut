@@ -5,7 +5,7 @@ class InfoPane {
     developerText = null;
 
     infoLabel = null;
-    infoText = null;
+    infoKeyValues = null;
     infoImage = null;
 
     y = null;
@@ -32,11 +32,24 @@ class InfoPane {
         developerText.set_rgb(146,214,252);
         developerText.font = "OpenSans-Regular.ttf";
         developerText.align = Align.Left;
-        
+
+        infoLabel = fe.add_text("INFORMATION", titleText.x, y+headerHeight+padding, fe.layout.width/2, headerHeight/3);
+        infoLabel.font = "OpenSans-Bold.ttf";
+        infoLabel.style = Style.Bold;
+        infoLabel.align = Align.Left;
+
+        fe.do_nut("keyvalue.nut");
+
+        infoKeyValues = [
+            KeyValue("Players", "[Players]", fe.layout.width/2, headerHeight/3),
+            KeyValue("Genre", "[Category]", fe.layout.width/2, headerHeight/3),
+            KeyValue("Controls", "[Control]", fe.layout.width/2, headerHeight/3)
+        ];
+
         local config = fe.get_config();
 
         infoImage = fe.add_artwork(config["info_artwork_type"], fe.layout.width/2 + padding, (y + headerHeight) + padding,
-        fe.layout.width/2 - (padding*2), fe.layout.height - (padding*2) - headerHeight );
+        fe.layout.width/2 - (padding*2), fe.layout.height - (padding*2) - headerHeight);
         infoImage.preserve_aspect_ratio = true;
     }
 
@@ -70,6 +83,15 @@ class InfoPane {
         background.y = y;
         titleText.y = y+padding;
         developerText.y = (y+headerHeight)-padding-(headerHeight/3);
+        infoLabel.y =  y+headerHeight+padding;
+
+        local index = 0;
+        foreach (keyValue in infoKeyValues) {
+            index += 1;
+            keyValue.y = infoLabel.y + (keyValue.height*index) + padding
+            keyValue.update();
+        }
+
         infoImage.y = (y + headerHeight) + padding;
     }
 }
