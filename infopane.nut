@@ -4,6 +4,10 @@ class InfoPane {
     titleText = null;
     developerText = null;
 
+    infoLabel = null;
+    infoText = null;
+    infoImage = null;
+
     y = null;
 
     isOpen = false;
@@ -28,6 +32,12 @@ class InfoPane {
         developerText.set_rgb(146,214,252);
         developerText.font = "OpenSans-Regular.ttf";
         developerText.align = Align.Left;
+        
+        local config = fe.get_config();
+
+        infoImage = fe.add_artwork(config["info_artwork_type"], fe.layout.width/2 + padding, (y + headerHeight) + padding,
+        fe.layout.width/2 - (padding*2), fe.layout.height - (padding*2) - headerHeight );
+        infoImage.preserve_aspect_ratio = true;
     }
 
     function open() {
@@ -60,5 +70,6 @@ class InfoPane {
         background.y = y;
         titleText.y = y+padding;
         developerText.y = (y+headerHeight)-padding-(headerHeight/3);
+        infoImage.y = (y + headerHeight) + padding;
     }
 }

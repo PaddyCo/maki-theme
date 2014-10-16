@@ -13,6 +13,9 @@ class UserConfig {
     </ label="Toggle Information Key", help="The key used to open/close the information pane", is_input="yes" />
 	toggle_info_key="R";
 
+    </ label="Info Artwork Type", help="The artwork to show in the information pane, Default: flyer" />
+    info_artwork_type="flyer";
+
     // TODO: Actually get this from the config instead of having to configure it
     </ label="Wheel Artwork Path", help="The path to the artwork" />
     wheel_artwork_path=@"D:\Games\Mame\wheels";
