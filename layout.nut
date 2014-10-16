@@ -28,11 +28,7 @@ function transition(ttype, var, ttime) {
     if (ttype == Transition.ToNewSelection) {
         print("//////\n");
         foreach (wheel in wheels) {
-            if (var == 1) {
-                wheel.next();
-            } else if (var == -1) {
-                wheel.previous();
-            }
+            wheel.scroll(-var);
             print(wheel.gameOffset + "\n");
         }
         print("//////\n");

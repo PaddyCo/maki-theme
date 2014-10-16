@@ -15,9 +15,10 @@ class Wheel {
     targetY = null;
 
     /**
-     * startGameOffset: Which games it should show, 0 is the active game while 1 is the next game.
-     * startX: X position of the wheel
-     * startY: Y position of the wheel
+     * Params:
+     *          startGameOffset: (int) Which games it should show, 0 is the active game while 1 is the next game.
+     *          startX: (int) X position of the wheel
+     *          startY: (int) Y position of the wheel
      */
     constructor(startGameOffset, startX, startY)
     {
@@ -40,45 +41,50 @@ class Wheel {
         updateGame();
     }
 
+    /**
+     * Animates the Wheel to specified position.
+     * Params:
+     *          x: (int) The X position to animate to, `null` to not animate
+     *          y: (int) The Y position to animate to, `null` to not animate
+     */
     function moveTo(x, y) {
         targetX = x;
         targetY = y;
     }
 
-    function previous() {
-        if (gameOffset == 2) {
-            gameOffset = -2;
-        } else {
-            gameOffset += 1;
-        }
+    /**
+     * Scrolls the Wheel the specified amount.
+     * Params:
+     *          var: (int) Which way to scroll and how much
+     */
+    function scroll(var) {
+        local amount = abs(var);
+        local direction = (var > 0) ? 1 : -1;
+        local animate = true;
 
-        local targetPos = 500 + (gameOffset * 500);
-        if (gameOffset == -2) {
-            x = targetPos;
-        } else {
-            moveTo(targetPos, null);
-        }
+        if (amount == 1) {
+            gameOffset += direction;
 
-        updateGame();
-    }
+            if (abs(gameOffset) > 2) {
+                gameOffset = (gameOffset > 0) ? -2 : 2;
+                animate = false;
+            }
 
-    function next() {
-        if (gameOffset == -2) {
-            gameOffset = 2;
-        } else {
-            gameOffset -= 1;
-        }
+            local targetX = 500 + (gameOffset * 500);
 
-        local targetPos = 500 + (gameOffset * 500);
-        if (gameOffset == 2) {
-            x = targetPos;
-        } else {
-            moveTo(targetPos, null);
+            if (animate) {
+                moveTo(targetX, null);
+            } else {
+                x = targetX;
+            }
         }
 
         updateGame();
     }
 
+    /**
+     * Updates the game the wheel is showing
+     */
     function updateGame() {
         imageObject.alpha = (gameOffset == 0) ? 255 : 100;
         textObject.alpha = (gameOffset == 0) ? 255 : 100;
@@ -93,6 +99,9 @@ class Wheel {
         textObject.visible = false;
     }
 
+    /**
+     * This runs every tick, updates position etc.
+     */
     function update() {
 
         if (targetX != null) {
