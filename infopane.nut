@@ -1,8 +1,14 @@
+fe.do_nut("keyvalue.nut");
+fe.do_nut("label.nut");
+
 class InfoPane {
 
     background = null;
     titleText = null;
     developerText = null;
+
+    playLabel = null;
+    playKeyValues = null;
 
     infoLabel = null;
     infoKeyValues = null;
@@ -33,13 +39,13 @@ class InfoPane {
         developerText.font = "OpenSans-Regular.ttf";
         developerText.align = Align.Left;
 
-        infoLabel = fe.add_text("INFORMATION", titleText.x, y+headerHeight+padding, fe.layout.width/2, headerHeight/3);
-        infoLabel.font = "OpenSans-Bold.ttf";
-        infoLabel.style = Style.Bold;
-        infoLabel.align = Align.Left;
+        playLabel = Label("STATISTICS", titleText.x, y+headerHeight+padding, fe.layout.width/2, headerHeight/3, true);
+        playKeyValues = [
+            KeyValue("Times started", "[PlayedCount]", fe.layout.width/2, headerHeight/3),
+            KeyValue("Time played", "[PlayedTime]", fe.layout.width/2, headerHeight/3)
+        ];
 
-        fe.do_nut("keyvalue.nut");
-
+        infoLabel = Label("INFORMATION", titleText.x, playLabel.y+padding, fe.layout.width/2, headerHeight/3, true);
         infoKeyValues = [
             KeyValue("Players", "[Players]", fe.layout.width/2, headerHeight/3),
             KeyValue("Genre", "[Category]", fe.layout.width/2, headerHeight/3),
@@ -83,9 +89,23 @@ class InfoPane {
         background.y = y;
         titleText.y = y+padding;
         developerText.y = (y+headerHeight)-padding-(headerHeight/3);
-        infoLabel.y =  y+headerHeight+padding;
+
+        // Update Play section
+        playLabel.y = y+headerHeight+padding;
+        playLabel.update();
 
         local index = 0;
+        foreach (keyValue in playKeyValues) {
+            index += 1;
+            keyValue.y = playLabel.y + (keyValue.height*index) + padding
+            keyValue.update();
+        }
+
+        // Update Information Section
+        infoLabel.y = playKeyValues[playKeyValues.len()-1].y+playKeyValues[playKeyValues.len()-1].height+padding;
+        infoLabel.update();
+
+        index = 0;
         foreach (keyValue in infoKeyValues) {
             index += 1;
             keyValue.y = infoLabel.y + (keyValue.height*index) + padding
