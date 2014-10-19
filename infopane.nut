@@ -22,12 +22,14 @@ class InfoPane {
     headerHeight = 64;
     padding = 10;
 
+    targetY = null;
+
     constructor() {
         y = fe.layout.height - headerHeight;
 
         background = fe.add_text("", 0, y, fe.layout.width, fe.layout.height);
         background.set_bg_rgb(0,0,0);
-        background.bg_alpha = 128;
+        background.bg_alpha = 200;
 
         titleText = fe.add_text("[Title]", (-11)+padding, y+padding, fe.layout.width, headerHeight/3);
         titleText.font = "OpenSans-Bold.ttf";
@@ -60,17 +62,32 @@ class InfoPane {
     }
 
     function open() {
-        y = 0;
+        targetY = 0;
         isOpen = true;
     }
 
     function close() {
-        y = fe.layout.height - headerHeight;
+        targetY = fe.layout.height - headerHeight;
         isOpen = false;
     }
 
     function update() {
         local config = fe.get_config();
+
+        if (targetY != null) {
+            local direction = (targetY > y) ? 1 : -1;
+            local speed = 35;
+
+            if ((direction == 1 && (y + speed) > targetY) || (direction == -1 && (y - speed) < targetY)) {
+                y = targetY;
+            } else {
+                y += speed * direction;
+            }
+
+            if (targetY == y) {
+                targetY = null;
+            }
+        }
 
         if (fe.get_input_state(config["toggle_info_key"])) {
             if (keyJustPressed) {
